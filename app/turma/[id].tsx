@@ -106,7 +106,7 @@ export default function TurmaDetalheScreen() {
     );
   }
 
-  if (!turma) {
+  if (!turma && !loading) {
     return (
       <ErroTela
         mensagem="Turma não encontrada"

@@ -178,7 +178,7 @@ export default function EscolaDetalheScreen() {
     );
   }
 
-  if (!escola) {
+  if (!escola && !loading) {
     return (
       <ErroTela
         mensagem="Escola não encontrada"
