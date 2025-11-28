@@ -47,7 +47,7 @@ export interface TurmaInput {
   nome: string;
   turno: Turno;
   anoLetivo: number;
-  capacidade?: number;
+  capacidade?: number | null;
 }
 
 export type TurmaUpdateInput = Partial<Omit<TurmaInput, "escolaId">>;

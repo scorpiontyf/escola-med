@@ -85,7 +85,7 @@ export default function EditarTurmaScreen() {
           anoLetivo: formValues.anoLetivo,
           capacidade: formValues.capacidade
             ? parseInt(formValues.capacidade, 10)
-            : undefined,
+            : null,
         };
 
         const validacao = turmaFactory.validate({

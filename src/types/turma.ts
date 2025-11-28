@@ -16,7 +16,7 @@ export interface TurmaInput {
   nome: string;
   turno: Turno;
   anoLetivo: number;
-  capacidade?: number;
+  capacidade?: number | null;
 }
 
 export interface TurmaFiltros {
