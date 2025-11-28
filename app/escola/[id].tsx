@@ -111,7 +111,7 @@ export default function EscolaDetalheScreen() {
       total: escola.turmas.length,
       capacidade: escola.turmas.reduce(
         (acc, t) => acc + (t.capacidade || 0),
-        0,
+        0
       ),
       turnos: [...new Set(escola.turmas.map((t) => t.turno))].length,
     };
@@ -122,7 +122,7 @@ export default function EscolaDetalheScreen() {
       if (id) {
         loadSchoolById(id);
       }
-    }, [id, loadSchoolById]),
+    }, [id, loadSchoolById])
   );
 
   const handleEditar = () => {
@@ -162,10 +162,6 @@ export default function EscolaDetalheScreen() {
     setFiltroAno("todos");
   };
 
-  if (loading && !escola) {
-    return <LoadingTela mensagem="Carregando escola..." />;
-  }
-
   if (error && !escola) {
     return (
       <ErroTela
@@ -178,14 +174,8 @@ export default function EscolaDetalheScreen() {
     );
   }
 
-  if (!escola && !loading) {
-    return (
-      <ErroTela
-        mensagem="Escola não encontrada"
-        onRetry={() => router.back()}
-        botaoTexto="Voltar"
-      />
-    );
+  if (!escola) {
+    return <LoadingTela mensagem="Carregando escola..." />;
   }
 
   return (

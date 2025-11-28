@@ -90,9 +90,6 @@ export default function TurmaDetalheScreen() {
     ]);
   };
 
-  if (loading && !turma) {
-    return <LoadingTela mensagem="Carregando turma..." />;
-  }
 
   if (error && !turma) {
     return (
@@ -106,15 +103,10 @@ export default function TurmaDetalheScreen() {
     );
   }
 
-  if (!turma && !loading) {
-    return (
-      <ErroTela
-        mensagem="Turma não encontrada"
-        onRetry={() => router.back()}
-        botaoTexto="Voltar"
-      />
-    );
+    if (!turma) {
+    return <LoadingTela mensagem="Carregando turma..." />;
   }
+
 
   return (
     <>
