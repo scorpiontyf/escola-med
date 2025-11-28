@@ -1,0 +1,1 @@
+export { iniciarMockServer } from './server';
