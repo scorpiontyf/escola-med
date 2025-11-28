@@ -46,20 +46,22 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 
     try {
       const turmas = await turmaService.listarPorEscola(escolaId);
-      set({ turmas, carregando: false });
+      set({ turmas });
 
       console.log(
         "📦 Store: Turmas carregadas para escola",
         escolaId,
         ":",
-        turmas.length,
+        turmas.length
       );
     } catch (error) {
       const mensagem =
         error instanceof ApiError ? error.message : "Erro ao carregar turmas";
 
-      set({ erro: mensagem, carregando: false });
+      set({ erro: mensagem });
       console.error("📦 Store: Erro ao carregar turmas:", mensagem);
+    } finally {
+      set({ carregando: false });
     }
   },
 
@@ -68,14 +70,16 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 
     try {
       const turmas = await turmaService.listar();
-      set({ turmas, carregando: false });
+      set({ turmas });
 
       console.log("📦 Store: Todas turmas carregadas:", turmas.length);
     } catch (error) {
       const mensagem =
         error instanceof ApiError ? error.message : "Erro ao carregar turmas";
 
-      set({ erro: mensagem, carregando: false });
+      set({ erro: mensagem });
+    } finally {
+      set({ carregando: false });
     }
   },
 
@@ -84,14 +88,16 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 
     try {
       const turma = await turmaService.buscarPorId(id);
-      set({ turmaSelecionada: turma, carregando: false });
+      set({ turmaSelecionada: turma });
 
       console.log("📦 Store: Turma carregada:", turma.nome);
     } catch (error) {
       const mensagem =
         error instanceof ApiError ? error.message : "Erro ao carregar turma";
 
-      set({ erro: mensagem, carregando: false });
+      set({ erro: mensagem });
+    } finally {
+      set({ carregando: false });
     }
   },
 
@@ -105,7 +111,7 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
       if (escolaIdAtual === dados.escolaId) {
         set((state) => ({
           turmas: [...state.turmas, novaTurma].sort((a, b) =>
-            a.nome.localeCompare(b.nome, "pt-BR"),
+            a.nome.localeCompare(b.nome, "pt-BR")
           ),
           executando: false,
         }));
@@ -126,7 +132,7 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 
   atualizarTurma: async (
     id: string,
-    dados: Partial<TurmaInput>,
+    dados: Partial<TurmaInput>
   ): Promise<Turma> => {
     set({ executando: true, erro: null });
 

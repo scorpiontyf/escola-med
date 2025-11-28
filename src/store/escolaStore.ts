@@ -41,15 +41,17 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
     try {
       const escolas = await escolaService.listar();
 
-      set({ escolas, carregando: false });
+      set({ escolas });
 
       console.log("📦 Store: Escolas carregadas:", escolas.length);
     } catch (error) {
       const mensagem =
         error instanceof ApiError ? error.message : "Erro ao carregar escolas";
 
-      set({ erro: mensagem, carregando: false });
+      set({ erro: mensagem });
       console.error("📦 Store: Erro ao carregar escolas:", mensagem);
+    } finally {
+      set({ carregando: false });
     }
   },
 
@@ -58,15 +60,17 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
 
     try {
       const escola = await escolaService.buscarPorId(id);
-      set({ escolaSelecionada: escola, carregando: false });
+      set({ escolaSelecionada: escola });
 
       console.log("📦 Store: Escola carregada:", escola.nome);
     } catch (error) {
       const mensagem =
         error instanceof ApiError ? error.message : "Erro ao carregar escola";
 
-      set({ erro: mensagem, carregando: false });
+      set({ erro: mensagem });
       console.error("📦 Store: Erro ao carregar escola:", mensagem);
+    } finally {
+      set({ carregando: false });
     }
   },
 
@@ -78,7 +82,7 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
 
       set((state) => ({
         escolas: [...state.escolas, novaEscola].sort((a, b) =>
-          a.nome.localeCompare(b.nome, "pt-BR"),
+          a.nome.localeCompare(b.nome, "pt-BR")
         ),
         executando: false,
       }));
