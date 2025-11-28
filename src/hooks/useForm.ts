@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 type ValidationRule<T> = {
   validate: (value: T[keyof T], allValues: T) => boolean;
@@ -17,7 +17,7 @@ interface UseFormOptions<T> {
 
 /**
  * Hook para gerenciar formulários
- * 
+ *
  * @example
  * const { values, errors, handleChange, handleSubmit, isValid } = useForm({
  *   initialValues: { nome: '', email: '' },
@@ -36,42 +36,51 @@ export function useForm<T extends Record<string, any>>({
   const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = useCallback(<K extends keyof T>(field: K, value: T[K]) => {
-    setValues((prev) => ({ ...prev, [field]: value }));
-    
-    if (errors[field]) {
+  const handleChange = useCallback(
+    <K extends keyof T>(field: K, value: T[K]) => {
+      setValues((prev) => ({ ...prev, [field]: value }));
+
+      if (errors[field]) {
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[field];
+          return newErrors;
+        });
+      }
+    },
+    [errors],
+  );
+
+  const validateField = useCallback(
+    <K extends keyof T>(field: K): boolean => {
+      const rules = validationRules[field];
+      if (!rules) return true;
+
+      for (const rule of rules) {
+        if (!rule.validate(values[field], values)) {
+          setErrors((prev) => ({ ...prev, [field]: rule.message }));
+          return false;
+        }
+      }
+
       setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
       });
-    }
-  }, [errors]);
+      return true;
+    },
+    [values, validationRules],
+  );
 
-  const validateField = useCallback(<K extends keyof T>(field: K): boolean => {
-    const rules = validationRules[field];
-    if (!rules) return true;
+  const handleBlur = useCallback(
+    <K extends keyof T>(field: K) => {
+      setTouched((prev) => ({ ...prev, [field]: true }));
 
-    for (const rule of rules) {
-      if (!rule.validate(values[field], values)) {
-        setErrors((prev) => ({ ...prev, [field]: rule.message }));
-        return false;
-      }
-    }
-
-    setErrors((prev) => {
-      const newErrors = { ...prev };
-      delete newErrors[field];
-      return newErrors;
-    });
-    return true;
-  }, [values, validationRules]);
-
-  const handleBlur = useCallback(<K extends keyof T>(field: K) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-    
-    validateField(field);
-  }, [validateField]);  
+      validateField(field);
+    },
+    [validateField],
+  );
 
   const validateAll = useCallback((): boolean => {
     let isValid = true;
@@ -97,7 +106,7 @@ export function useForm<T extends Record<string, any>>({
   const handleSubmit = useCallback(async () => {
     const allTouched = Object.keys(values).reduce(
       (acc, key) => ({ ...acc, [key]: true }),
-      {}
+      {},
     );
     setTouched(allTouched);
 
@@ -130,7 +139,7 @@ export function useForm<T extends Record<string, any>>({
   const isValid = Object.keys(errors).length === 0;
 
   const hasVisibleErrors = Object.keys(errors).some(
-    (key) => touched[key as keyof T]
+    (key) => touched[key as keyof T],
   );
 
   return {

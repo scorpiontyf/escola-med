@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "escola-med",
-    "slug": "escola-med",
+    "slug": "med-prova",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -14,7 +14,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.canechia.medprova",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +26,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.canechia.medprova"
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +39,19 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "12143c8f-2d45-4529-a064-7f1b17f16b56"
+      }
+    },
+    "owner": "canechia",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/12143c8f-2d45-4529-a064-7f1b17f16b56"
     }
   }
 }

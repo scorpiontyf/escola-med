@@ -1,12 +1,12 @@
 /**
  * Componente de Campo de Busca usando Gluestack UI
- * 
+ *
  * Input estilizado para busca com ícone e botão de limpar.
  */
 
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { Input, InputSlot, InputIcon, InputField } from './ui/input';
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { Input, InputSlot, InputIcon, InputField } from "./ui/input";
 
 interface CampoBuscaProps {
   valor: string;
@@ -18,27 +18,22 @@ interface CampoBuscaProps {
 export function CampoBusca({
   valor,
   onChange,
-  placeholder = 'Buscar...',
+  placeholder = "Buscar...",
   autoFocus = false,
 }: CampoBuscaProps) {
   const limpar = () => {
-    onChange('');
+    onChange("");
   };
 
   return (
-    <Input
-      variant="rounded"
-      size="md"
-      bg="$white"
-      className="flex"
-    >
+    <Input variant="rounded" size="md" bg="$white" className="flex">
       <InputSlot pl="$3" className="pt-2 pl-2">
         <InputIcon as={Ionicons} name="search" color="$textLight400" />
       </InputSlot>
 
       <InputField
         value={valor}
-        style={{color: "black"}}
+        style={{ color: "black" }}
         onChangeText={onChange}
         placeholder={placeholder}
         autoFocus={autoFocus}

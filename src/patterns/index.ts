@@ -6,14 +6,14 @@ export {
   TurmaApiRepository,
   getEscolaRepository,
   getTurmaRepository,
-} from './repository';
+} from "./repository";
 
 export {
   EscolaFactory,
   TurmaFactory,
   getEscolaFactory,
   getTurmaFactory,
-} from './factory';
+} from "./factory";
 
 export {
   type IStorageAdapter,
@@ -24,4 +24,4 @@ export {
   getStorageService,
   createTestStorageService,
   STORAGE_KEYS,
-} from './adapter';
+} from "./adapter";

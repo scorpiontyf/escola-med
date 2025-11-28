@@ -20,6 +20,6 @@ export interface EscolaInput {
 
 export interface EscolaFiltros {
   busca?: string;
-  ordenarPor?: 'nome' | 'criadoEm';
-  ordem?: 'asc' | 'desc';
+  ordenarPor?: "nome" | "criadoEm";
+  ordem?: "asc" | "desc";
 }

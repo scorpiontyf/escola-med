@@ -1,19 +1,19 @@
 /**
  * Componente Header - Cabeçalho de Tela
- * 
+ *
  * Header reutilizável com título, subtítulo e ações.
  */
 
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { Pressable } from 'react-native';
-import { Box } from './ui/box';
-import { Heading } from './ui/heading';
-import { HStack } from './ui/hstack';
-import { Icon } from './ui/icon';
-import { VStack } from './ui/vstack';
-import { Text } from './ui/text';
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { Pressable } from "react-native";
+import { Box } from "./ui/box";
+import { Heading } from "./ui/heading";
+import { HStack } from "./ui/hstack";
+import { Icon } from "./ui/icon";
+import { VStack } from "./ui/vstack";
+import { Text } from "./ui/text";
 interface HeaderProps {
   titulo: string;
   subtitulo?: string;
@@ -59,12 +59,7 @@ export function Header({
             borderRadius="$full"
             bg="$primary700"
           >
-            <Icon
-              as={Ionicons}
-              name="arrow-back"
-              size="xl"
-              color="$white"
-            />
+            <Icon as={Ionicons} name="arrow-back" size="xl" color="$white" />
           </Pressable>
         ) : (
           <Box w="$10" />
@@ -90,12 +85,7 @@ export function Header({
             borderRadius="$full"
             bg="$primary700"
           >
-            <Icon
-              as={Ionicons}
-              name={acaoIcone}
-              size="xl"
-              color="$white"
-            />
+            <Icon as={Ionicons} name={acaoIcone} size="xl" color="$white" />
           </Pressable>
         ) : (
           <Box w="$10" />
@@ -120,7 +110,13 @@ export function HeaderFormulario({
   salvando?: boolean;
 }) {
   return (
-    <Box bg="$white" py="$3" px="$4" borderBottomWidth={1} borderBottomColor="$borderLight200">
+    <Box
+      bg="$white"
+      py="$3"
+      px="$4"
+      borderBottomWidth={1}
+      borderBottomColor="$borderLight200"
+    >
       <HStack alignItems="center" justifyContent="space-between">
         <Pressable onPress={onCancelar} disabled={salvando}>
           <Text color="$error600" fontWeight="$medium">
@@ -132,10 +128,10 @@ export function HeaderFormulario({
 
         <Pressable onPress={onSalvar} disabled={salvando}>
           <Text
-            color={salvando ? '$textLight400' : '$primary600'}
+            color={salvando ? "$textLight400" : "$primary600"}
             fontWeight="$bold"
           >
-            {salvando ? 'Salvando...' : 'Salvar'}
+            {salvando ? "Salvando..." : "Salvar"}
           </Text>
         </Pressable>
       </HStack>

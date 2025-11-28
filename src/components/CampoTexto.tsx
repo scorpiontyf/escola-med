@@ -57,8 +57,8 @@ export function CampoTexto({
               temErro
                 ? CORES.erro
                 : focado
-                ? CORES.primaria
-                : CORES.textoSecundario
+                  ? CORES.primaria
+                  : CORES.textoSecundario
             }
             style={styles.icone}
           />

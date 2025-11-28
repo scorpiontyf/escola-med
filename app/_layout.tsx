@@ -10,7 +10,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "@/global.css";
 import { GluestackUIProvider } from "@components/ui/gluestack-ui-provider";
 
-
 SplashScreen.preventAutoHideAsync();
 
 iniciarMockServer();

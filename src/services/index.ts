@@ -1,2 +1,2 @@
-export { escolaService, ApiError } from './escolaService';
-export { turmaService } from './turmaService';
+export { escolaService, ApiError } from "./escolaService";
+export { turmaService } from "./turmaService";

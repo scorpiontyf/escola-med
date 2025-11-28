@@ -1,28 +1,28 @@
 /**
  * Hook useClasses - Gerenciamento de Turmas
- * 
+ *
  * Hook personalizado que encapsula toda a lógica de turmas.
  */
 
-import { useCallback, useMemo } from 'react';
-import { useTurmaStore } from '@store/turmaStore';
-import { TurmaInput, Turma } from '../types/turma';
-import { Turno } from '../types/turno';
+import { useCallback, useMemo } from "react";
+import { useTurmaStore } from "@store/turmaStore";
+import { TurmaInput, Turma } from "../types/turma";
+import { Turno } from "../types/turno";
 
 interface UseClassesOptions {
   schoolId?: string;
-  filterTurno?: Turno | 'todos';
-  filterAno?: number | 'todos';
+  filterTurno?: Turno | "todos";
+  filterAno?: number | "todos";
 }
 
 /**
  * Hook para gerenciar turmas
- * 
+ *
  * @example
  * const { classes, loading, createClass, deleteClass } = useClasses({ schoolId: '123' });
  */
 export function useClasses(options: UseClassesOptions = {}) {
-  const { filterTurno = 'todos', filterAno = 'todos' } = options;
+  const { filterTurno = "todos", filterAno = "todos" } = options;
 
   const {
     turmas,
@@ -42,8 +42,8 @@ export function useClasses(options: UseClassesOptions = {}) {
 
   const classesFiltered = useMemo(() => {
     return turmas.filter((turma) => {
-      const passaTurno = filterTurno === 'todos' || turma.turno === filterTurno;
-      const passaAno = filterAno === 'todos' || turma.anoLetivo === filterAno;
+      const passaTurno = filterTurno === "todos" || turma.turno === filterTurno;
+      const passaAno = filterAno === "todos" || turma.anoLetivo === filterAno;
       return passaTurno && passaAno;
     });
   }, [turmas, filterTurno, filterAno]);
@@ -57,36 +57,54 @@ export function useClasses(options: UseClassesOptions = {}) {
     return [...new Set(turmas.map((t) => t.turno))];
   }, [turmas]);
 
-  const loadClassesBySchool = useCallback(async (escolaId: string) => {
-    await carregarTurmasPorEscola(escolaId);
-  }, [carregarTurmasPorEscola]);
+  const loadClassesBySchool = useCallback(
+    async (escolaId: string) => {
+      await carregarTurmasPorEscola(escolaId);
+    },
+    [carregarTurmasPorEscola],
+  );
 
   const loadAllClasses = useCallback(async () => {
     await carregarTodasTurmas();
   }, [carregarTodasTurmas]);
 
-  const loadClassById = useCallback(async (id: string) => {
-    await carregarTurmaPorId(id);
-  }, [carregarTurmaPorId]);
+  const loadClassById = useCallback(
+    async (id: string) => {
+      await carregarTurmaPorId(id);
+    },
+    [carregarTurmaPorId],
+  );
 
-  const createClass = useCallback(async (data: TurmaInput): Promise<Turma> => {
-    return await criarTurma(data);
-  }, [criarTurma]);
+  const createClass = useCallback(
+    async (data: TurmaInput): Promise<Turma> => {
+      return await criarTurma(data);
+    },
+    [criarTurma],
+  );
 
-  const updateClass = useCallback(async (id: string, data: Partial<TurmaInput>): Promise<Turma> => {
-    return await atualizarTurma(id, data);
-  }, [atualizarTurma]);
+  const updateClass = useCallback(
+    async (id: string, data: Partial<TurmaInput>): Promise<Turma> => {
+      return await atualizarTurma(id, data);
+    },
+    [atualizarTurma],
+  );
 
-  const deleteClass = useCallback(async (id: string) => {
-    await excluirTurma(id);
-  }, [excluirTurma]);
+  const deleteClass = useCallback(
+    async (id: string) => {
+      await excluirTurma(id);
+    },
+    [excluirTurma],
+  );
 
-  const stats = useMemo(() => ({
-    total: turmas.length,
-    filtered: classesFiltered.length,
-    totalCapacity: turmas.reduce((acc, t) => acc + (t.capacidade || 0), 0),
-    shiftsCount: availableShifts.length,
-  }), [turmas, classesFiltered, availableShifts]);
+  const stats = useMemo(
+    () => ({
+      total: turmas.length,
+      filtered: classesFiltered.length,
+      totalCapacity: turmas.reduce((acc, t) => acc + (t.capacidade || 0), 0),
+      shiftsCount: availableShifts.length,
+    }),
+    [turmas, classesFiltered, availableShifts],
+  );
 
   return {
     classes: classesFiltered,

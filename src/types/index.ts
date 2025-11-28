@@ -4,13 +4,13 @@ export interface BaseEntity {
   atualizadoEm: string;
 }
 
-export type Turno = 'matutino' | 'vespertino' | 'noturno' | 'integral';
+export type Turno = "matutino" | "vespertino" | "noturno" | "integral";
 
 export const TurnoLabels: Record<Turno, string> = {
-  matutino: 'Matutino',
-  vespertino: 'Vespertino',
-  noturno: 'Noturno',
-  integral: 'Integral',
+  matutino: "Matutino",
+  vespertino: "Vespertino",
+  noturno: "Noturno",
+  integral: "Integral",
 };
 
 export interface Escola extends BaseEntity {
@@ -28,7 +28,7 @@ export interface EscolaInput {
   email?: string;
 }
 
-export type EscolaSemTurmas = Omit<Escola, 'turmas'>;
+export type EscolaSemTurmas = Omit<Escola, "turmas">;
 
 export type EscolaComContagem = EscolaSemTurmas & {
   quantidadeTurmas: number;
@@ -50,7 +50,7 @@ export interface TurmaInput {
   capacidade?: number;
 }
 
-export type TurmaUpdateInput = Partial<Omit<TurmaInput, 'escolaId'>>;
+export type TurmaUpdateInput = Partial<Omit<TurmaInput, "escolaId">>;
 
 export type TurmaComEscola = Turma & {
   escola: EscolaSemTurmas;
@@ -63,14 +63,14 @@ export interface FiltroBase {
 }
 
 export interface FiltroEscola extends FiltroBase {
-  ordenarPor?: 'nome' | 'turmas' | 'recente';
-  ordem?: 'asc' | 'desc';
+  ordenarPor?: "nome" | "turmas" | "recente";
+  ordem?: "asc" | "desc";
 }
 
 export interface FiltroTurma extends FiltroBase {
   escolaId?: string;
-  turno?: Turno | 'todos';
-  anoLetivo?: number | 'todos';
+  turno?: Turno | "todos";
+  anoLetivo?: number | "todos";
 }
 
 export interface ResultadoPaginado<T> {
@@ -127,7 +127,8 @@ export type FormState<T> = {
 
 export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-export type RequiredBy<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+export type RequiredBy<T, K extends keyof T> = Omit<T, K> &
+  Required<Pick<T, K>>;
 
 export type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -141,42 +142,42 @@ export type AsyncFunction<TArgs extends any[], TReturn> = (
 
 export function isEscola(obj: any): obj is Escola {
   return (
-    typeof obj === 'object' &&
+    typeof obj === "object" &&
     obj !== null &&
-    typeof obj.id === 'string' &&
-    typeof obj.nome === 'string' &&
-    typeof obj.endereco === 'string' &&
+    typeof obj.id === "string" &&
+    typeof obj.nome === "string" &&
+    typeof obj.endereco === "string" &&
     Array.isArray(obj.turmas)
   );
 }
 
 export function isTurma(obj: any): obj is Turma {
   return (
-    typeof obj === 'object' &&
+    typeof obj === "object" &&
     obj !== null &&
-    typeof obj.id === 'string' &&
-    typeof obj.escolaId === 'string' &&
-    typeof obj.nome === 'string' &&
-    typeof obj.turno === 'string' &&
-    typeof obj.anoLetivo === 'number'
+    typeof obj.id === "string" &&
+    typeof obj.escolaId === "string" &&
+    typeof obj.nome === "string" &&
+    typeof obj.turno === "string" &&
+    typeof obj.anoLetivo === "number"
   );
 }
 
 export function isApiError(obj: any): obj is ApiErrorResponse {
   return (
-    typeof obj === 'object' &&
+    typeof obj === "object" &&
     obj !== null &&
-    typeof obj.erro === 'string' &&
+    typeof obj.erro === "string" &&
     obj.success === false
   );
 }
 
 export function isTurnoValido(turno: string): turno is Turno {
-  return ['matutino', 'vespertino', 'noturno', 'integral'].includes(turno);
+  return ["matutino", "vespertino", "noturno", "integral"].includes(turno);
 }
 
 export const ANOS_LETIVOS = [2024, 2025, 2026] as const;
-export type AnoLetivo = typeof ANOS_LETIVOS[number];
+export type AnoLetivo = (typeof ANOS_LETIVOS)[number];
 
-export const ORDENACAO_ESCOLAS = ['nome', 'turmas', 'recente'] as const;
-export type OrdenacaoEscola = typeof ORDENACAO_ESCOLAS[number];
+export const ORDENACAO_ESCOLAS = ["nome", "turmas", "recente"] as const;
+export type OrdenacaoEscola = (typeof ORDENACAO_ESCOLAS)[number];

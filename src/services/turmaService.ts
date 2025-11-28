@@ -1,28 +1,25 @@
 /**
  * Service de Turmas (Classes)
- * 
+ *
  * Camada de abstração para chamadas HTTP relacionadas a turmas.
  * Usa o endpoint /api/classes conforme especificado.
  */
 
-import { Turma, TurmaInput } from '../types/turma';
-import { API_CONFIG } from '@utils/constants';
-import { ApiError } from './escolaService';
+import { Turma, TurmaInput } from "../types/turma";
+import { API_CONFIG } from "@utils/constants";
+import { ApiError } from "./escolaService";
 
 const BASE_URL = API_CONFIG.baseUrl;
 
 /**
  * Função auxiliar para fazer requisições
  */
-async function fetchApi<T>(
-  url: string,
-  options?: RequestInit
-): Promise<T> {
+async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
   try {
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options?.headers,
       },
     });
@@ -34,10 +31,7 @@ async function fetchApi<T>(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new ApiError(
-        data.erro || 'Erro na requisição',
-        response.status
-      );
+      throw new ApiError(data.erro || "Erro na requisição", response.status);
     }
 
     return data;
@@ -45,7 +39,7 @@ async function fetchApi<T>(
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError('Erro de conexão com o servidor', 500);
+    throw new ApiError("Erro de conexão com o servidor", 500);
   }
 }
 
@@ -83,7 +77,7 @@ export const turmaService = {
    */
   criar: async (dados: TurmaInput): Promise<Turma> => {
     return fetchApi<Turma>(`${BASE_URL}/classes`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(dados),
     });
   },
@@ -94,7 +88,7 @@ export const turmaService = {
    */
   atualizar: async (id: string, dados: Partial<TurmaInput>): Promise<Turma> => {
     return fetchApi<Turma>(`${BASE_URL}/classes/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(dados),
     });
   },
@@ -105,7 +99,7 @@ export const turmaService = {
    */
   excluir: async (id: string): Promise<void> => {
     await fetchApi<void>(`${BASE_URL}/classes/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   },
 };

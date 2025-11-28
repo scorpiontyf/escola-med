@@ -1,11 +1,11 @@
 /**
  * Adapter Pattern
- * 
+ *
  * Adapta diferentes fontes de armazenamento para uma interface comum.
  * Permite usar AsyncStorage, MMKV, ou qualquer outro storage.
  */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
  * Interface comum para qualquer storage
@@ -24,7 +24,7 @@ export interface IStorageAdapter {
 export class AsyncStorageAdapter implements IStorageAdapter {
   private prefix: string;
 
-  constructor(prefix: string = 'escola_app_') {
+  constructor(prefix: string = "escola_app_") {
     this.prefix = prefix;
   }
 
@@ -37,7 +37,7 @@ export class AsyncStorageAdapter implements IStorageAdapter {
       const value = await AsyncStorage.getItem(this.getKey(key));
       return value ? JSON.parse(value) : null;
     } catch (error) {
-      console.error('AsyncStorage getItem error:', error);
+      console.error("AsyncStorage getItem error:", error);
       return null;
     }
   }
@@ -46,7 +46,7 @@ export class AsyncStorageAdapter implements IStorageAdapter {
     try {
       await AsyncStorage.setItem(this.getKey(key), JSON.stringify(value));
     } catch (error) {
-      console.error('AsyncStorage setItem error:', error);
+      console.error("AsyncStorage setItem error:", error);
       throw error;
     }
   }
@@ -55,7 +55,7 @@ export class AsyncStorageAdapter implements IStorageAdapter {
     try {
       await AsyncStorage.removeItem(this.getKey(key));
     } catch (error) {
-      console.error('AsyncStorage removeItem error:', error);
+      console.error("AsyncStorage removeItem error:", error);
       throw error;
     }
   }
@@ -65,7 +65,7 @@ export class AsyncStorageAdapter implements IStorageAdapter {
       const keys = await this.getAllKeys();
       await AsyncStorage.multiRemove(keys);
     } catch (error) {
-      console.error('AsyncStorage clear error:', error);
+      console.error("AsyncStorage clear error:", error);
       throw error;
     }
   }
@@ -73,9 +73,9 @@ export class AsyncStorageAdapter implements IStorageAdapter {
   async getAllKeys(): Promise<string[]> {
     try {
       const allKeys = await AsyncStorage.getAllKeys();
-      return allKeys.filter(key => key.startsWith(this.prefix));
+      return allKeys.filter((key) => key.startsWith(this.prefix));
     } catch (error) {
-      console.error('AsyncStorage getAllKeys error:', error);
+      console.error("AsyncStorage getAllKeys error:", error);
       return [];
     }
   }
@@ -121,21 +121,24 @@ export class CacheStorageAdapter implements IStorageAdapter {
   private baseAdapter: IStorageAdapter;
   private defaultTTL: number; // em milissegundos
 
-  constructor(baseAdapter: IStorageAdapter, defaultTTL: number = 5 * 60 * 1000) {
+  constructor(
+    baseAdapter: IStorageAdapter,
+    defaultTTL: number = 5 * 60 * 1000,
+  ) {
     this.baseAdapter = baseAdapter;
     this.defaultTTL = defaultTTL;
   }
 
   async getItem<T>(key: string): Promise<T | null> {
     const cached = await this.baseAdapter.getItem<CacheItem<T>>(key);
-    
+
     if (!cached) return null;
-    
+
     if (Date.now() > cached.expiry) {
       await this.removeItem(key);
       return null;
     }
-    
+
     return cached.value;
   }
 
@@ -164,10 +167,10 @@ export class CacheStorageAdapter implements IStorageAdapter {
  * Chaves de armazenamento
  */
 export const STORAGE_KEYS = {
-  ESCOLAS: 'escolas',
-  TURMAS: 'turmas',
-  ULTIMA_SINCRONIZACAO: 'ultima_sincronizacao',
-  PREFERENCIAS: 'preferencias',
+  ESCOLAS: "escolas",
+  TURMAS: "turmas",
+  ULTIMA_SINCRONIZACAO: "ultima_sincronizacao",
+  PREFERENCIAS: "preferencias",
 } as const;
 
 /**
@@ -182,7 +185,10 @@ export class OfflineStorageService {
 
   async salvarEscolas(escolas: any[]): Promise<void> {
     await this.storage.setItem(STORAGE_KEYS.ESCOLAS, escolas);
-    await this.storage.setItem(STORAGE_KEYS.ULTIMA_SINCRONIZACAO, new Date().toISOString());
+    await this.storage.setItem(
+      STORAGE_KEYS.ULTIMA_SINCRONIZACAO,
+      new Date().toISOString(),
+    );
   }
 
   async carregarEscolas(): Promise<any[] | null> {
@@ -205,7 +211,6 @@ export class OfflineStorageService {
     await this.storage.clear();
   }
 }
-
 
 let storageService: OfflineStorageService | null = null;
 

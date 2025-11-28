@@ -1,37 +1,35 @@
-
-import { create } from 'zustand';
-import { Turma, TurmaInput } from '../types/turma';
-import { turmaService } from '@services/turmaService';
-import { ApiError } from '@services/escolaService';
+import { create } from "zustand";
+import { Turma, TurmaInput } from "../types/turma";
+import { turmaService } from "@services/turmaService";
+import { ApiError } from "@services/escolaService";
 
 interface TurmaStore {
-  
   turmas: Turma[];
-  
+
   turmaSelecionada: Turma | null;
-  
+
   escolaIdAtual: string | null;
-  
+
   carregando: boolean;
-  
+
   executando: boolean;
-  
+
   erro: string | null;
 
   carregarTurmasPorEscola: (escolaId: string) => Promise<void>;
-  
+
   carregarTodasTurmas: () => Promise<void>;
-  
+
   carregarTurmaPorId: (id: string) => Promise<void>;
-  
+
   criarTurma: (dados: TurmaInput) => Promise<Turma>;
-  
+
   atualizarTurma: (id: string, dados: Partial<TurmaInput>) => Promise<Turma>;
-  
+
   excluirTurma: (id: string) => Promise<void>;
-  
+
   limparTurmaSelecionada: () => void;
-  
+
   limparErro: () => void;
 }
 
@@ -43,22 +41,25 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
   executando: false,
   erro: null,
 
-
   carregarTurmasPorEscola: async (escolaId: string) => {
     set({ carregando: true, erro: null, escolaIdAtual: escolaId });
 
     try {
       const turmas = await turmaService.listarPorEscola(escolaId);
       set({ turmas, carregando: false });
-      
-      console.log('📦 Store: Turmas carregadas para escola', escolaId, ':', turmas.length);
+
+      console.log(
+        "📦 Store: Turmas carregadas para escola",
+        escolaId,
+        ":",
+        turmas.length,
+      );
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao carregar turmas';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao carregar turmas";
+
       set({ erro: mensagem, carregando: false });
-      console.error('📦 Store: Erro ao carregar turmas:', mensagem);
+      console.error("📦 Store: Erro ao carregar turmas:", mensagem);
     }
   },
 
@@ -68,13 +69,12 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
     try {
       const turmas = await turmaService.listar();
       set({ turmas, carregando: false });
-      
-      console.log('📦 Store: Todas turmas carregadas:', turmas.length);
+
+      console.log("📦 Store: Todas turmas carregadas:", turmas.length);
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao carregar turmas';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao carregar turmas";
+
       set({ erro: mensagem, carregando: false });
     }
   },
@@ -85,13 +85,12 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
     try {
       const turma = await turmaService.buscarPorId(id);
       set({ turmaSelecionada: turma, carregando: false });
-      
-      console.log('📦 Store: Turma carregada:', turma.nome);
+
+      console.log("📦 Store: Turma carregada:", turma.nome);
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao carregar turma';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao carregar turma";
+
       set({ erro: mensagem, carregando: false });
     }
   },
@@ -101,12 +100,12 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 
     try {
       const novaTurma = await turmaService.criar(dados);
-      
+
       const { escolaIdAtual } = get();
       if (escolaIdAtual === dados.escolaId) {
         set((state) => ({
-          turmas: [...state.turmas, novaTurma].sort((a, b) => 
-            a.nome.localeCompare(b.nome, 'pt-BR')
+          turmas: [...state.turmas, novaTurma].sort((a, b) =>
+            a.nome.localeCompare(b.nome, "pt-BR"),
           ),
           executando: false,
         }));
@@ -114,39 +113,40 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
         set({ executando: false });
       }
 
-      console.log('📦 Store: Turma criada:', novaTurma.nome);
+      console.log("📦 Store: Turma criada:", novaTurma.nome);
       return novaTurma;
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao criar turma';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao criar turma";
+
       set({ erro: mensagem, executando: false });
       throw error;
     }
   },
 
-  atualizarTurma: async (id: string, dados: Partial<TurmaInput>): Promise<Turma> => {
+  atualizarTurma: async (
+    id: string,
+    dados: Partial<TurmaInput>,
+  ): Promise<Turma> => {
     set({ executando: true, erro: null });
 
     try {
       const turmaAtualizada = await turmaService.atualizar(id, dados);
-      
+
       set((state) => ({
         turmas: state.turmas
           .map((t) => (t.id === id ? turmaAtualizada : t))
-          .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')),
+          .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")),
         turmaSelecionada: turmaAtualizada,
         executando: false,
       }));
 
-      console.log('📦 Store: Turma atualizada:', turmaAtualizada.nome);
+      console.log("📦 Store: Turma atualizada:", turmaAtualizada.nome);
       return turmaAtualizada;
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao atualizar turma';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao atualizar turma";
+
       set({ erro: mensagem, executando: false });
       throw error;
     }
@@ -157,19 +157,18 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 
     try {
       await turmaService.excluir(id);
-      
+
       set((state) => ({
         turmas: state.turmas.filter((t) => t.id !== id),
         turmaSelecionada: null,
         executando: false,
       }));
 
-      console.log('📦 Store: Turma excluída:', id);
+      console.log("📦 Store: Turma excluída:", id);
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao excluir turma';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao excluir turma";
+
       set({ erro: mensagem, executando: false });
       throw error;
     }
@@ -185,7 +184,10 @@ export const useTurmaStore = create<TurmaStore>((set, get) => ({
 }));
 
 export const useTurmas = () => useTurmaStore((state) => state.turmas);
-export const useTurmaSelecionada = () => useTurmaStore((state) => state.turmaSelecionada);
-export const useTurmaCarregando = () => useTurmaStore((state) => state.carregando);
-export const useTurmaExecutando = () => useTurmaStore((state) => state.executando);
+export const useTurmaSelecionada = () =>
+  useTurmaStore((state) => state.turmaSelecionada);
+export const useTurmaCarregando = () =>
+  useTurmaStore((state) => state.carregando);
+export const useTurmaExecutando = () =>
+  useTurmaStore((state) => state.executando);
 export const useTurmaErro = () => useTurmaStore((state) => state.erro);

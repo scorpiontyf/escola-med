@@ -33,16 +33,11 @@ export function Erro({
       <Text style={styles.mensagem}>{mensagem}</Text>
 
       {onRetry && (
-        <Button
-          onPress={onRetry}
-          action="primary"
-          style={styles.botao}
-        >
+        <Button onPress={onRetry} action="primary" style={styles.botao}>
           <ButtonIcon
             as={() => <Ionicons name="refresh" size={16} color="white" />}
           />
           <ButtonText style={{ color: CORES.branco }}>{botaoTexto}</ButtonText>
-          
         </Button>
       )}
     </View>

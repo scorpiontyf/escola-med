@@ -1,35 +1,34 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo } from "react";
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from 'react-native';
-import { useLocalSearchParams, useRouter, Stack, useFocusEffect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CORES, ESPACAMENTO, FONTE, RAIO, MENSAGENS } from '@utils/constants';
-import { Turma, TurnoLabels, Turno } from '../../src/types/index';
-import { formatarData } from '@utils/index';
+  useLocalSearchParams,
+  useRouter,
+  Stack,
+  useFocusEffect,
+} from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { CORES, ESPACAMENTO, FONTE, RAIO, MENSAGENS } from "@utils/constants";
+import { Turma, TurnoLabels, Turno } from "../../src/types/index";
+import { formatarData } from "@utils/index";
 
-import { useSchools, useResponsive } from '@hooks/index';
+import { useSchools, useResponsive } from "@hooks/index";
 
-import { Button, ButtonText } from '@components/ui/button';
-import { Card } from '@components/Card';
-import { Badge } from '@components/Badge';
-import { LoadingTela } from '@components/Loading';
-import { ErroTela } from '@components/Erro';
-import { Divisor } from '@components/Divisor';
-import { Chip } from '@components/Chip';
-import { EstadoVazio } from '@components/EstadoVazio';
+import { Button, ButtonText } from "@components/ui/button";
+import { Card } from "@components/Card";
+import { Badge } from "@components/Badge";
+import { LoadingTela } from "@components/Loading";
+import { ErroTela } from "@components/Erro";
+import { Divisor } from "@components/Divisor";
+import { Chip } from "@components/Chip";
+import { EstadoVazio } from "@components/EstadoVazio";
 
-function InfoItem({ 
-  icone, 
-  label, 
-  valor 
-}: { 
-  icone: keyof typeof Ionicons.glyphMap; 
-  label: string; 
+function InfoItem({
+  icone,
+  label,
+  valor,
+}: {
+  icone: keyof typeof Ionicons.glyphMap;
+  label: string;
   valor?: string | null;
 }) {
   if (!valor) return null;
@@ -45,13 +44,7 @@ function InfoItem({
   );
 }
 
-function TurmaCard({ 
-  turma, 
-  onPress 
-}: { 
-  turma: Turma; 
-  onPress: () => void;
-}) {
+function TurmaCard({ turma, onPress }: { turma: Turma; onPress: () => void }) {
   return (
     <Card pressionavel onPress={onPress} style={styles.turmaCard}>
       <View style={styles.turmaContent}>
@@ -83,9 +76,9 @@ export default function EscolaDetalheScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { padding, isMobile } = useResponsive();
 
-  const { 
-    selectedSchool: escola, 
-    loading, 
+  const {
+    selectedSchool: escola,
+    loading,
     error,
     executing,
     loadSchoolById,
@@ -93,15 +86,15 @@ export default function EscolaDetalheScreen() {
     clearError,
   } = useSchools();
 
-  const [filtroTurno, setFiltroTurno] = useState<Turno | 'todos'>('todos');
-  const [filtroAno, setFiltroAno] = useState<number | 'todos'>('todos');
+  const [filtroTurno, setFiltroTurno] = useState<Turno | "todos">("todos");
+  const [filtroAno, setFiltroAno] = useState<number | "todos">("todos");
 
   const turmasFiltradas = useMemo(() => {
     if (!escola?.turmas) return [];
 
     return escola.turmas.filter((turma) => {
-      const passaTurno = filtroTurno === 'todos' || turma.turno === filtroTurno;
-      const passaAno = filtroAno === 'todos' || turma.anoLetivo === filtroAno;
+      const passaTurno = filtroTurno === "todos" || turma.turno === filtroTurno;
+      const passaAno = filtroAno === "todos" || turma.anoLetivo === filtroAno;
       return passaTurno && passaAno;
     });
   }, [escola?.turmas, filtroTurno, filtroAno]);
@@ -116,8 +109,11 @@ export default function EscolaDetalheScreen() {
     if (!escola?.turmas) return { total: 0, capacidade: 0, turnos: 0 };
     return {
       total: escola.turmas.length,
-      capacidade: escola.turmas.reduce((acc, t) => acc + (t.capacidade || 0), 0),
-      turnos: [...new Set(escola.turmas.map(t => t.turno))].length,
+      capacidade: escola.turmas.reduce(
+        (acc, t) => acc + (t.capacidade || 0),
+        0,
+      ),
+      turnos: [...new Set(escola.turmas.map((t) => t.turno))].length,
     };
   }, [escola?.turmas]);
 
@@ -126,7 +122,7 @@ export default function EscolaDetalheScreen() {
       if (id) {
         loadSchoolById(id);
       }
-    }, [id, loadSchoolById])
+    }, [id, loadSchoolById]),
   );
 
   const handleEditar = () => {
@@ -134,27 +130,23 @@ export default function EscolaDetalheScreen() {
   };
 
   const handleExcluir = () => {
-    Alert.alert(
-      'Excluir Escola',
-      MENSAGENS.confirmarExclusaoEscola,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteSchool(id!);
-              Alert.alert('Sucesso', MENSAGENS.escolaExcluida, [
-                { text: 'OK', onPress: () => router.back() },
-              ]);
-            } catch (error: any) {
-              Alert.alert('Erro', error.message || MENSAGENS.erroExcluir);
-            }
-          },
+    Alert.alert("Excluir Escola", MENSAGENS.confirmarExclusaoEscola, [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteSchool(id!);
+            Alert.alert("Sucesso", MENSAGENS.escolaExcluida, [
+              { text: "OK", onPress: () => router.back() },
+            ]);
+          } catch (error: any) {
+            Alert.alert("Erro", error.message || MENSAGENS.erroExcluir);
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const handleNovaTurma = () => {
@@ -166,8 +158,8 @@ export default function EscolaDetalheScreen() {
   };
 
   const limparFiltros = () => {
-    setFiltroTurno('todos');
-    setFiltroAno('todos');
+    setFiltroTurno("todos");
+    setFiltroAno("todos");
   };
 
   if (loading && !escola) {
@@ -176,20 +168,20 @@ export default function EscolaDetalheScreen() {
 
   if (error && !escola) {
     return (
-      <ErroTela 
-        mensagem={error} 
+      <ErroTela
+        mensagem={error}
         onRetry={() => {
           clearError();
           if (id) loadSchoolById(id);
-        }} 
+        }}
       />
     );
   }
 
   if (!escola) {
     return (
-      <ErroTela 
-        mensagem="Escola não encontrada" 
+      <ErroTela
+        mensagem="Escola não encontrada"
         onRetry={() => router.back()}
         botaoTexto="Voltar"
       />
@@ -200,17 +192,23 @@ export default function EscolaDetalheScreen() {
     <>
       <Stack.Screen options={{ title: escola.nome }} />
 
-      <ScrollView 
-        style={styles.container} 
+      <ScrollView
+        style={styles.container}
         contentContainerStyle={[styles.content, { padding }]}
       >
         <Card style={styles.cardPrincipal}>
           <View style={styles.cardHeader}>
-            <View style={[
-              styles.escolaIconContainer,
-              !isMobile && { width: 64, height: 64 }
-            ]}>
-              <Ionicons name="school" size={isMobile ? 32 : 36} color={CORES.primaria} />
+            <View
+              style={[
+                styles.escolaIconContainer,
+                !isMobile && { width: 64, height: 64 },
+              ]}
+            >
+              <Ionicons
+                name="school"
+                size={isMobile ? 32 : 36}
+                color={CORES.primaria}
+              />
             </View>
             <View style={styles.escolaHeaderInfo}>
               <Text style={styles.escolaNome}>{escola.nome}</Text>
@@ -252,7 +250,9 @@ export default function EscolaDetalheScreen() {
             >
               <View className="flex-row items-center gap-1">
                 <Ionicons name="trash" size={16} color={CORES.erro} />
-                <ButtonText>{executing ? 'Excluindo...' : 'Excluir'}</ButtonText>
+                <ButtonText>
+                  {executing ? "Excluindo..." : "Excluir"}
+                </ButtonText>
               </View>
             </Button>
           </View>
@@ -265,12 +265,8 @@ export default function EscolaDetalheScreen() {
               Turmas ({estatisticas.total})
             </Text>
           </View>
-          
-          <Button
-            onPress={handleNovaTurma}
-            action="primary"
-            size="sm"
-          >
+
+          <Button onPress={handleNovaTurma} action="primary" size="sm">
             <View className="flex-row items-center gap-1">
               <Ionicons name="add" size={16} color="#fff" />
               <ButtonText>Nova Turma</ButtonText>
@@ -285,12 +281,13 @@ export default function EscolaDetalheScreen() {
               <View style={styles.filtroChips}>
                 <Chip
                   label="Todos"
-                  selecionado={filtroTurno === 'todos'}
-                  onPress={() => setFiltroTurno('todos')}
+                  selecionado={filtroTurno === "todos"}
+                  onPress={() => setFiltroTurno("todos")}
                   contador={escola.turmas.length}
                 />
                 {Object.entries(TurnoLabels).map(([key, label]) => {
-                  const count = escola.turmas?.filter((t) => t.turno === key).length || 0;
+                  const count =
+                    escola.turmas?.filter((t) => t.turno === key).length || 0;
                   if (count === 0) return null;
                   return (
                     <Chip
@@ -311,8 +308,8 @@ export default function EscolaDetalheScreen() {
                 <View style={styles.filtroChips}>
                   <Chip
                     label="Todos"
-                    selecionado={filtroAno === 'todos'}
-                    onPress={() => setFiltroAno('todos')}
+                    selecionado={filtroAno === "todos"}
+                    onPress={() => setFiltroAno("todos")}
                   />
                   {anosDisponiveis.map((ano) => (
                     <Chip
@@ -326,10 +323,11 @@ export default function EscolaDetalheScreen() {
               </View>
             )}
 
-            {(filtroTurno !== 'todos' || filtroAno !== 'todos') && (
+            {(filtroTurno !== "todos" || filtroAno !== "todos") && (
               <View style={styles.filtroResultado}>
                 <Text style={styles.filtroResultadoTexto}>
-                  Mostrando {turmasFiltradas.length} de {escola.turmas.length} turma(s)
+                  Mostrando {turmasFiltradas.length} de {escola.turmas.length}{" "}
+                  turma(s)
                 </Text>
                 <Button onPress={limparFiltros} variant="link" size="sm">
                   <ButtonText>Limpar filtros</ButtonText>
@@ -376,15 +374,21 @@ export default function EscolaDetalheScreen() {
             <Text style={styles.estatisticasTitulo}>Resumo</Text>
             <View style={styles.estatisticasGrid}>
               <View style={styles.estatisticaItem}>
-                <Text style={styles.estatisticaValor}>{estatisticas.total}</Text>
+                <Text style={styles.estatisticaValor}>
+                  {estatisticas.total}
+                </Text>
                 <Text style={styles.estatisticaLabel}>Turmas</Text>
               </View>
               <View style={styles.estatisticaItem}>
-                <Text style={styles.estatisticaValor}>{estatisticas.capacidade}</Text>
+                <Text style={styles.estatisticaValor}>
+                  {estatisticas.capacidade}
+                </Text>
                 <Text style={styles.estatisticaLabel}>Capacidade Total</Text>
               </View>
               <View style={styles.estatisticaItem}>
-                <Text style={styles.estatisticaValor}>{estatisticas.turnos}</Text>
+                <Text style={styles.estatisticaValor}>
+                  {estatisticas.turnos}
+                </Text>
                 <Text style={styles.estatisticaLabel}>Turnos</Text>
               </View>
             </View>
@@ -407,16 +411,16 @@ const styles = StyleSheet.create({
     marginBottom: ESPACAMENTO.lg,
   },
   cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   escolaIconContainer: {
     width: 56,
     height: 56,
     borderRadius: RAIO.lg,
     backgroundColor: CORES.infoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: ESPACAMENTO.md,
   },
   escolaHeaderInfo: {
@@ -424,7 +428,7 @@ const styles = StyleSheet.create({
   },
   escolaNome: {
     fontSize: FONTE.lg,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.texto,
   },
   escolaData: {
@@ -433,8 +437,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   infoItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     marginBottom: ESPACAMENTO.sm,
   },
   infoTexto: {
@@ -451,23 +455,23 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   acoes: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: ESPACAMENTO.md,
   },
   secaoHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: ESPACAMENTO.md,
   },
   secaoTituloContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: ESPACAMENTO.sm,
   },
   secaoTitulo: {
     fontSize: FONTE.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: CORES.texto,
   },
   turmasLista: {
@@ -477,16 +481,16 @@ const styles = StyleSheet.create({
     padding: ESPACAMENTO.sm,
   },
   turmaContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   turmaIconContainer: {
     width: 40,
     height: 40,
     borderRadius: RAIO.md,
     backgroundColor: CORES.sucessoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: ESPACAMENTO.md,
   },
   turmaInfo: {
@@ -494,13 +498,13 @@ const styles = StyleSheet.create({
   },
   turmaNome: {
     fontSize: FONTE.md,
-    fontWeight: '600',
+    fontWeight: "600",
     color: CORES.texto,
     marginBottom: 4,
   },
   turmaDetalhes: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: ESPACAMENTO.sm,
   },
   turmaAno: {
@@ -516,20 +520,20 @@ const styles = StyleSheet.create({
   },
   estatisticasTitulo: {
     fontSize: FONTE.md,
-    fontWeight: '600',
+    fontWeight: "600",
     color: CORES.texto,
     marginBottom: ESPACAMENTO.md,
   },
   estatisticasGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   estatisticaItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   estatisticaValor: {
     fontSize: FONTE.titulo,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.primaria,
   },
   estatisticaLabel: {
@@ -549,14 +553,14 @@ const styles = StyleSheet.create({
     marginBottom: ESPACAMENTO.xs,
   },
   filtroChips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: ESPACAMENTO.sm,
   },
   filtroResultado: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingTop: ESPACAMENTO.sm,
     borderTopWidth: 1,
     borderTopColor: CORES.divisor,

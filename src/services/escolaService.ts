@@ -1,12 +1,12 @@
 /**
  * Service de Escolas
- * 
+ *
  * Camada de abstração para chamadas HTTP relacionadas a escolas.
  * Usa o endpoint /api/schools conforme especificado.
  */
 
-import { Escola, EscolaInput } from '../types/escola';
-import { API_CONFIG } from '@utils/constants';
+import { Escola, EscolaInput } from "../types/escola";
+import { API_CONFIG } from "@utils/constants";
 
 const BASE_URL = API_CONFIG.baseUrl;
 
@@ -16,19 +16,16 @@ export class ApiError extends Error {
   constructor(message: string, status: number) {
     super(message);
     this.status = status;
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
-async function fetchApi<T>(
-  url: string,
-  options?: RequestInit
-): Promise<T> {
+async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
   try {
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options?.headers,
       },
     });
@@ -40,10 +37,7 @@ async function fetchApi<T>(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new ApiError(
-        data.erro || 'Erro na requisição',
-        response.status
-      );
+      throw new ApiError(data.erro || "Erro na requisição", response.status);
     }
 
     return data;
@@ -51,7 +45,7 @@ async function fetchApi<T>(
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError('Erro de conexão com o servidor', 500);
+    throw new ApiError("Erro de conexão com o servidor", 500);
   }
 }
 
@@ -81,7 +75,7 @@ export const escolaService = {
    */
   criar: async (dados: EscolaInput): Promise<Escola> => {
     return fetchApi<Escola>(`${BASE_URL}/schools`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(dados),
     });
   },
@@ -92,7 +86,7 @@ export const escolaService = {
    */
   atualizar: async (id: string, dados: EscolaInput): Promise<Escola> => {
     return fetchApi<Escola>(`${BASE_URL}/schools/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(dados),
     });
   },
@@ -103,7 +97,7 @@ export const escolaService = {
    */
   excluir: async (id: string): Promise<void> => {
     await fetchApi<void>(`${BASE_URL}/schools/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   },
 };

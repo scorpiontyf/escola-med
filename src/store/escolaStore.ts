@@ -1,30 +1,30 @@
-import { create } from 'zustand';
-import { Escola, EscolaInput } from '../types/escola';
-import { escolaService, ApiError } from '@services/escolaService';
+import { create } from "zustand";
+import { Escola, EscolaInput } from "../types/escola";
+import { escolaService, ApiError } from "@services/escolaService";
 
 interface EscolaStore {
   escolas: Escola[];
-  
+
   escolaSelecionada: Escola | null;
-  
+
   carregando: boolean;
-  
+
   executando: boolean;
-  
+
   erro: string | null;
 
   carregarEscolas: () => Promise<void>;
-  
+
   carregarEscolaPorId: (id: string) => Promise<void>;
-  
+
   criarEscola: (dados: EscolaInput) => Promise<Escola>;
-  
+
   atualizarEscola: (id: string, dados: EscolaInput) => Promise<Escola>;
-  
+
   excluirEscola: (id: string) => Promise<void>;
-  
+
   limparEscolaSelecionada: () => void;
-  
+
   limparErro: () => void;
 }
 
@@ -35,23 +35,21 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
   executando: false,
   erro: null,
 
-
   carregarEscolas: async () => {
     set({ carregando: true, erro: null });
 
     try {
       const escolas = await escolaService.listar();
-      
+
       set({ escolas, carregando: false });
-      
-      console.log('📦 Store: Escolas carregadas:', escolas.length);
+
+      console.log("📦 Store: Escolas carregadas:", escolas.length);
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao carregar escolas';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao carregar escolas";
+
       set({ erro: mensagem, carregando: false });
-      console.error('📦 Store: Erro ao carregar escolas:', mensagem);
+      console.error("📦 Store: Erro ao carregar escolas:", mensagem);
     }
   },
 
@@ -61,15 +59,14 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
     try {
       const escola = await escolaService.buscarPorId(id);
       set({ escolaSelecionada: escola, carregando: false });
-      
-      console.log('📦 Store: Escola carregada:', escola.nome);
+
+      console.log("📦 Store: Escola carregada:", escola.nome);
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao carregar escola';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao carregar escola";
+
       set({ erro: mensagem, carregando: false });
-      console.error('📦 Store: Erro ao carregar escola:', mensagem);
+      console.error("📦 Store: Erro ao carregar escola:", mensagem);
     }
   },
 
@@ -78,23 +75,22 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
 
     try {
       const novaEscola = await escolaService.criar(dados);
-      
+
       set((state) => ({
-        escolas: [...state.escolas, novaEscola].sort((a, b) => 
-          a.nome.localeCompare(b.nome, 'pt-BR')
+        escolas: [...state.escolas, novaEscola].sort((a, b) =>
+          a.nome.localeCompare(b.nome, "pt-BR"),
         ),
         executando: false,
       }));
 
-      console.log('📦 Store: Escola criada:', novaEscola.nome);
+      console.log("📦 Store: Escola criada:", novaEscola.nome);
       return novaEscola;
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao criar escola';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao criar escola";
+
       set({ erro: mensagem, executando: false });
-      console.error('📦 Store: Erro ao criar escola:', mensagem);
+      console.error("📦 Store: Erro ao criar escola:", mensagem);
       throw error;
     }
   },
@@ -104,24 +100,23 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
 
     try {
       const escolaAtualizada = await escolaService.atualizar(id, dados);
-      
+
       set((state) => ({
         escolas: state.escolas
           .map((e) => (e.id === id ? escolaAtualizada : e))
-          .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')),
+          .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")),
         escolaSelecionada: escolaAtualizada,
         executando: false,
       }));
 
-      console.log('📦 Store: Escola atualizada:', escolaAtualizada.nome);
+      console.log("📦 Store: Escola atualizada:", escolaAtualizada.nome);
       return escolaAtualizada;
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao atualizar escola';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao atualizar escola";
+
       set({ erro: mensagem, executando: false });
-      console.error('📦 Store: Erro ao atualizar escola:', mensagem);
+      console.error("📦 Store: Erro ao atualizar escola:", mensagem);
       throw error;
     }
   },
@@ -131,21 +126,20 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
 
     try {
       await escolaService.excluir(id);
-      
+
       set((state) => ({
         escolas: state.escolas.filter((e) => e.id !== id),
         escolaSelecionada: null,
         executando: false,
       }));
 
-      console.log('📦 Store: Escola excluída:', id);
+      console.log("📦 Store: Escola excluída:", id);
     } catch (error) {
-      const mensagem = error instanceof ApiError 
-        ? error.message 
-        : 'Erro ao excluir escola';
-      
+      const mensagem =
+        error instanceof ApiError ? error.message : "Erro ao excluir escola";
+
       set({ erro: mensagem, executando: false });
-      console.error('📦 Store: Erro ao excluir escola:', mensagem);
+      console.error("📦 Store: Erro ao excluir escola:", mensagem);
       throw error;
     }
   },
@@ -159,13 +153,15 @@ export const useEscolaStore = create<EscolaStore>((set, get) => ({
   },
 }));
 
-
 export const useEscolas = () => useEscolaStore((state) => state.escolas);
 
-export const useEscolaSelecionada = () => useEscolaStore((state) => state.escolaSelecionada);
+export const useEscolaSelecionada = () =>
+  useEscolaStore((state) => state.escolaSelecionada);
 
-export const useEscolaCarregando = () => useEscolaStore((state) => state.carregando);
+export const useEscolaCarregando = () =>
+  useEscolaStore((state) => state.carregando);
 
-export const useEscolaExecutando = () => useEscolaStore((state) => state.executando);
+export const useEscolaExecutando = () =>
+  useEscolaStore((state) => state.executando);
 
 export const useEscolaErro = () => useEscolaStore((state) => state.erro);

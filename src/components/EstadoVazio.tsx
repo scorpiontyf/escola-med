@@ -42,9 +42,7 @@ export function EstadoVazio({
 
       {botaoTexto && onBotaoPress && (
         <Button onPress={onBotaoPress} action="primary" style={styles.botao}>
-          <ButtonText>
-            {botaoTexto}
-          </ButtonText>
+          <ButtonText>{botaoTexto}</ButtonText>
         </Button>
       )}
     </View>

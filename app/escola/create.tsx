@@ -1,13 +1,13 @@
-import { CampoTexto } from '@components/CampoTexto';
-import { Ionicons } from '@expo/vector-icons';
+import { CampoTexto } from "@components/CampoTexto";
+import { Ionicons } from "@expo/vector-icons";
 
-import { useSchools, useForm } from '@hooks/index';
+import { useSchools, useForm } from "@hooks/index";
 
-import { getEscolaFactory } from '../../src/patterns/index';
+import { getEscolaFactory } from "../../src/patterns/index";
 
-import { EscolaInput } from '../../src/types/index';
-import { CORES, ESPACAMENTO, FONTE, MENSAGENS } from '@utils/constants';
-import { useRouter } from 'expo-router';
+import { EscolaInput } from "../../src/types/index";
+import { CORES, ESPACAMENTO, FONTE, MENSAGENS } from "@utils/constants";
+import { useRouter } from "expo-router";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -16,15 +16,15 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import { Box } from '@components/ui/box';
-import { Button, ButtonText } from '@components/ui/button';
+} from "react-native";
+import { Box } from "@components/ui/box";
+import { Button, ButtonText } from "@components/ui/button";
 
 const initialValues: EscolaInput = {
-  nome: '',
-  endereco: '',
-  telefone: '',
-  email: '',
+  nome: "",
+  endereco: "",
+  telefone: "",
+  email: "",
 };
 
 const escolaFactory = getEscolaFactory();
@@ -67,14 +67,14 @@ export default function NovaEscolaScreen() {
       email: [
         {
           validate: (value) => {
-            if (!value || value.trim() === '') return true; 
-            const result = escolaFactory.validate({ 
-              ...initialValues, 
-              email: value 
+            if (!value || value.trim() === "") return true;
+            const result = escolaFactory.validate({
+              ...initialValues,
+              email: value,
             });
             return !result.errors.email;
           },
-          message: 'E-mail inválido',
+          message: "E-mail inválido",
         },
       ],
     },
@@ -95,11 +95,11 @@ export default function NovaEscolaScreen() {
 
         await createSchool(dados);
 
-        Alert.alert('Sucesso', MENSAGENS.escolaCriada, [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert("Sucesso", MENSAGENS.escolaCriada, [
+          { text: "OK", onPress: () => router.back() },
         ]);
       } catch (error: any) {
-        Alert.alert('Erro', error.message || MENSAGENS.erroSalvar);
+        Alert.alert("Erro", error.message || MENSAGENS.erroSalvar);
       }
     },
   });
@@ -114,7 +114,7 @@ export default function NovaEscolaScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         contentContainerStyle={styles.content}
@@ -134,8 +134,8 @@ export default function NovaEscolaScreen() {
           <CampoTexto
             label="Nome da Escola"
             value={values.nome}
-            onChangeText={(text) => handleChange('nome', text)}
-            onBlur={() => handleBlur('nome')}
+            onChangeText={(text) => handleChange("nome", text)}
+            onBlur={() => handleBlur("nome")}
             placeholder="Ex: Escola Municipal João da Silva"
             erro={errors.nome}
             obrigatorio
@@ -146,8 +146,8 @@ export default function NovaEscolaScreen() {
           <CampoTexto
             label="Endereço"
             value={values.endereco}
-            onChangeText={(text) => handleChange('endereco', text)}
-            onBlur={() => handleBlur('endereco')}
+            onChangeText={(text) => handleChange("endereco", text)}
+            onBlur={() => handleBlur("endereco")}
             placeholder="Ex: Rua das Flores, 123 - Centro"
             erro={errors.endereco}
             obrigatorio
@@ -157,8 +157,8 @@ export default function NovaEscolaScreen() {
 
           <CampoTexto
             label="Telefone"
-            value={values.telefone || ''}
-            onChangeText={(text) => handleChange('telefone', text)}
+            value={values.telefone || ""}
+            onChangeText={(text) => handleChange("telefone", text)}
             placeholder="Ex: (11) 1234-5678"
             icone="call"
             keyboardType="phone-pad"
@@ -166,9 +166,9 @@ export default function NovaEscolaScreen() {
 
           <CampoTexto
             label="E-mail"
-            value={values.email || ''}
-            onChangeText={(text) => handleChange('email', text)}
-            onBlur={() => handleBlur('email')}
+            value={values.email || ""}
+            onChangeText={(text) => handleChange("email", text)}
+            onBlur={() => handleBlur("email")}
             placeholder="Ex: escola@email.com"
             erro={errors.email}
             icone="mail"
@@ -197,7 +197,7 @@ export default function NovaEscolaScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Ionicons name="checkmark" size={18} color="#fff" />
-              <ButtonText>{carregando ? 'Salvando...' : 'Salvar'}</ButtonText>
+              <ButtonText>{carregando ? "Salvando..." : "Salvar"}</ButtonText>
             </View>
           </Button>
         </View>
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     padding: ESPACAMENTO.md,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: ESPACAMENTO.lg,
   },
   iconContainer: {
@@ -223,13 +223,13 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     backgroundColor: CORES.infoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: ESPACAMENTO.md,
   },
   titulo: {
     fontSize: FONTE.xl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.texto,
   },
   subtitulo: {

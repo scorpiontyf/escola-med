@@ -6,19 +6,25 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CORES, ESPACAMENTO, FONTE, MENSAGENS, ANOS_LETIVOS } from '@utils/constants';
-import { TurmaInput, Turno, TurnoLabels } from '../../src/types/index';
+} from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  CORES,
+  ESPACAMENTO,
+  FONTE,
+  MENSAGENS,
+  ANOS_LETIVOS,
+} from "@utils/constants";
+import { TurmaInput, Turno, TurnoLabels } from "../../src/types/index";
 
-import { useClasses, useForm } from '@hooks/index';
+import { useClasses, useForm } from "@hooks/index";
 
-import { getTurmaFactory } from '../../src/patterns/index';
-import { Button, ButtonText } from '@components/ui/button';
-import { Box } from '@components/ui/box';
-import { CampoTexto } from '@components/CampoTexto';
-import { Seletor } from '@components/Seletor';
+import { getTurmaFactory } from "../../src/patterns/index";
+import { Button, ButtonText } from "@components/ui/button";
+import { Box } from "@components/ui/box";
+import { CampoTexto } from "@components/CampoTexto";
+import { Seletor } from "@components/Seletor";
 
 const OPCOES_TURNO = Object.entries(TurnoLabels).map(([valor, label]) => ({
   valor: valor as Turno,
@@ -39,10 +45,10 @@ export default function NovaTurmaScreen() {
   const { createClass, executing } = useClasses();
 
   const initialValues = {
-    nome: '',
-    turno: 'matutino' as Turno,
+    nome: "",
+    turno: "matutino" as Turno,
     anoLetivo: new Date().getFullYear(),
-    capacidade: '',
+    capacidade: "",
   };
 
   const {
@@ -62,13 +68,13 @@ export default function NovaTurmaScreen() {
         },
         {
           validate: (value) => value.trim().length >= 2,
-          message: 'Nome deve ter pelo menos 2 caracteres',
+          message: "Nome deve ter pelo menos 2 caracteres",
         },
       ],
     },
     onSubmit: async (formValues) => {
       if (!escolaId) {
-        Alert.alert('Erro', 'Escola não identificada');
+        Alert.alert("Erro", "Escola não identificada");
         return;
       }
 
@@ -78,7 +84,9 @@ export default function NovaTurmaScreen() {
           nome: formValues.nome.trim(),
           turno: formValues.turno,
           anoLetivo: formValues.anoLetivo,
-          capacidade: formValues.capacidade ? parseInt(formValues.capacidade, 10) : undefined,
+          capacidade: formValues.capacidade
+            ? parseInt(formValues.capacidade, 10)
+            : undefined,
         };
 
         const validacao = turmaFactory.validate(dados);
@@ -89,11 +97,11 @@ export default function NovaTurmaScreen() {
 
         await createClass(dados);
 
-        Alert.alert('Sucesso', MENSAGENS.turmaCriada, [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert("Sucesso", MENSAGENS.turmaCriada, [
+          { text: "OK", onPress: () => router.back() },
         ]);
       } catch (error: any) {
-        Alert.alert('Erro', error.message || MENSAGENS.erroSalvar);
+        Alert.alert("Erro", error.message || MENSAGENS.erroSalvar);
       }
     },
   });
@@ -107,7 +115,7 @@ export default function NovaTurmaScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         contentContainerStyle={styles.content}
@@ -125,8 +133,8 @@ export default function NovaTurmaScreen() {
           <CampoTexto
             label="Nome da Turma"
             value={values.nome}
-            onChangeText={(text) => handleChange('nome', text)}
-            onBlur={() => handleBlur('nome')}
+            onChangeText={(text) => handleChange("nome", text)}
+            onBlur={() => handleBlur("nome")}
             placeholder="Ex: 5º Ano A"
             erro={errors.nome}
             obrigatorio
@@ -137,7 +145,7 @@ export default function NovaTurmaScreen() {
             label="Turno"
             opcoes={OPCOES_TURNO}
             valor={values.turno}
-            onChange={(value) => handleChange('turno', value)}
+            onChange={(value) => handleChange("turno", value)}
             obrigatorio
           />
 
@@ -145,14 +153,14 @@ export default function NovaTurmaScreen() {
             label="Ano Letivo"
             opcoes={OPCOES_ANO}
             valor={values.anoLetivo}
-            onChange={(value) => handleChange('anoLetivo', value)}
+            onChange={(value) => handleChange("anoLetivo", value)}
             obrigatorio
           />
 
           <CampoTexto
             label="Capacidade de Alunos"
             value={values.capacidade}
-            onChangeText={(text) => handleChange('capacidade', text)}
+            onChangeText={(text) => handleChange("capacidade", text)}
             placeholder="Ex: 30"
             icone="people"
             keyboardType="numeric"
@@ -179,7 +187,7 @@ export default function NovaTurmaScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Ionicons name="checkmark" size={18} color="#fff" />
-              <ButtonText>{carregando ? 'Salvando...' : 'Salvar'}</ButtonText>
+              <ButtonText>{carregando ? "Salvando..." : "Salvar"}</ButtonText>
             </View>
           </Button>
         </View>
@@ -197,7 +205,7 @@ const styles = StyleSheet.create({
     padding: ESPACAMENTO.md,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: ESPACAMENTO.lg,
   },
   iconContainer: {
@@ -205,13 +213,13 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     backgroundColor: CORES.sucessoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: ESPACAMENTO.md,
   },
   titulo: {
     fontSize: FONTE.xl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.texto,
   },
   subtitulo: {

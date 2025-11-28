@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,26 +7,25 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CORES, ESPACAMENTO, FONTE, MENSAGENS } from '@utils/constants';
-import { EscolaInput } from '../../../src/types/index';
+} from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { CORES, ESPACAMENTO, FONTE, MENSAGENS } from "@utils/constants";
+import { EscolaInput } from "../../../src/types/index";
 
-import { useSchools, useForm } from '@hooks/index';
+import { useSchools, useForm } from "@hooks/index";
 
-
-import { Button, ButtonText } from '@components/ui/button';
-import { Box } from '@components/ui/box';
-import { CampoTexto } from '@components/CampoTexto';
-import { LoadingTela } from '@components/Loading';
-import { getEscolaFactory } from '../../../src/patterns/factory';
+import { Button, ButtonText } from "@components/ui/button";
+import { Box } from "@components/ui/box";
+import { CampoTexto } from "@components/CampoTexto";
+import { LoadingTela } from "@components/Loading";
+import { getEscolaFactory } from "../../../src/patterns/factory";
 
 const initialValues: EscolaInput = {
-  nome: '',
-  endereco: '',
-  telefone: '',
-  email: '',
+  nome: "",
+  endereco: "",
+  telefone: "",
+  email: "",
 };
 
 const escolaFactory = getEscolaFactory();
@@ -36,13 +35,8 @@ export default function EditarEscolaScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [carregouDados, setCarregouDados] = useState(false);
 
-  const { 
-    selectedSchool,
-    loading,
-    executing,
-    loadSchoolById,
-    updateSchool,
-  } = useSchools();
+  const { selectedSchool, loading, executing, loadSchoolById, updateSchool } =
+    useSchools();
 
   const {
     values,
@@ -78,11 +72,14 @@ export default function EditarEscolaScreen() {
       email: [
         {
           validate: (value) => {
-            if (!value || value.trim() === '') return true;
-            const result = escolaFactory.validate({ ...initialValues, email: value });
+            if (!value || value.trim() === "") return true;
+            const result = escolaFactory.validate({
+              ...initialValues,
+              email: value,
+            });
             return !result.errors.email;
           },
-          message: 'E-mail inválido',
+          message: "E-mail inválido",
         },
       ],
     },
@@ -103,11 +100,11 @@ export default function EditarEscolaScreen() {
 
         await updateSchool(id!, dados);
 
-        Alert.alert('Sucesso', MENSAGENS.escolaAtualizada, [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert("Sucesso", MENSAGENS.escolaAtualizada, [
+          { text: "OK", onPress: () => router.back() },
         ]);
       } catch (error: any) {
-        Alert.alert('Erro', error.message || MENSAGENS.erroSalvar);
+        Alert.alert("Erro", error.message || MENSAGENS.erroSalvar);
       }
     },
   });
@@ -123,8 +120,8 @@ export default function EditarEscolaScreen() {
       setFormValues({
         nome: selectedSchool.nome,
         endereco: selectedSchool.endereco,
-        telefone: selectedSchool.telefone || '',
-        email: selectedSchool.email || '',
+        telefone: selectedSchool.telefone || "",
+        email: selectedSchool.email || "",
       });
       setCarregouDados(true);
     }
@@ -143,7 +140,7 @@ export default function EditarEscolaScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         contentContainerStyle={styles.content}
@@ -161,8 +158,8 @@ export default function EditarEscolaScreen() {
           <CampoTexto
             label="Nome da Escola"
             value={values.nome}
-            onChangeText={(text) => handleChange('nome', text)}
-            onBlur={() => handleBlur('nome')}
+            onChangeText={(text) => handleChange("nome", text)}
+            onBlur={() => handleBlur("nome")}
             placeholder="Ex: Escola Municipal João da Silva"
             erro={errors.nome}
             obrigatorio
@@ -173,8 +170,8 @@ export default function EditarEscolaScreen() {
           <CampoTexto
             label="Endereço"
             value={values.endereco}
-            onChangeText={(text) => handleChange('endereco', text)}
-            onBlur={() => handleBlur('endereco')}
+            onChangeText={(text) => handleChange("endereco", text)}
+            onBlur={() => handleBlur("endereco")}
             placeholder="Ex: Rua das Flores, 123 - Centro"
             erro={errors.endereco}
             obrigatorio
@@ -184,8 +181,8 @@ export default function EditarEscolaScreen() {
 
           <CampoTexto
             label="Telefone"
-            value={values.telefone || ''}
-            onChangeText={(text) => handleChange('telefone', text)}
+            value={values.telefone || ""}
+            onChangeText={(text) => handleChange("telefone", text)}
             placeholder="Ex: (11) 1234-5678"
             icone="call"
             keyboardType="phone-pad"
@@ -193,9 +190,9 @@ export default function EditarEscolaScreen() {
 
           <CampoTexto
             label="E-mail"
-            value={values.email || ''}
-            onChangeText={(text) => handleChange('email', text)}
-            onBlur={() => handleBlur('email')}
+            value={values.email || ""}
+            onChangeText={(text) => handleChange("email", text)}
+            onBlur={() => handleBlur("email")}
             placeholder="Ex: escola@email.com"
             erro={errors.email}
             icone="mail"
@@ -223,7 +220,7 @@ export default function EditarEscolaScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Ionicons name="checkmark" size={18} color="#fff" />
-              <ButtonText>{carregando ? 'Salvando...' : 'Salvar'}</ButtonText>
+              <ButtonText>{carregando ? "Salvando..." : "Salvar"}</ButtonText>
             </View>
           </Button>
         </View>
@@ -241,7 +238,7 @@ const styles = StyleSheet.create({
     padding: ESPACAMENTO.md,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: ESPACAMENTO.lg,
   },
   iconContainer: {
@@ -249,13 +246,13 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     backgroundColor: CORES.infoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: ESPACAMENTO.md,
   },
   titulo: {
     fontSize: FONTE.xl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.texto,
   },
   subtitulo: {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,20 +7,26 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CORES, ESPACAMENTO, FONTE, MENSAGENS, ANOS_LETIVOS } from '@utils/constants';
-import { TurmaInput, Turno, TurnoLabels } from '../../../src/types/index';
+} from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  CORES,
+  ESPACAMENTO,
+  FONTE,
+  MENSAGENS,
+  ANOS_LETIVOS,
+} from "@utils/constants";
+import { TurmaInput, Turno, TurnoLabels } from "../../../src/types/index";
 
-import { useClasses, useForm } from '@hooks/index';
+import { useClasses, useForm } from "@hooks/index";
 
-import { getTurmaFactory } from '../../../src/patterns/index';
-import { Button, ButtonText } from '@components/ui/button';
-import { Box } from '@components/ui/box';
-import { LoadingTela } from '@components/Loading';
-import { CampoTexto } from '@components/CampoTexto';
-import { Seletor } from '@components/Seletor';
+import { getTurmaFactory } from "../../../src/patterns/index";
+import { Button, ButtonText } from "@components/ui/button";
+import { Box } from "@components/ui/box";
+import { LoadingTela } from "@components/Loading";
+import { CampoTexto } from "@components/CampoTexto";
+import { Seletor } from "@components/Seletor";
 
 const OPCOES_TURNO = Object.entries(TurnoLabels).map(([valor, label]) => ({
   valor: valor as Turno,
@@ -35,10 +41,10 @@ const OPCOES_ANO = ANOS_LETIVOS.map((ano) => ({
 const turmaFactory = getTurmaFactory();
 
 const initialValues = {
-  nome: '',
-  turno: 'matutino' as Turno,
+  nome: "",
+  turno: "matutino" as Turno,
   anoLetivo: new Date().getFullYear(),
-  capacidade: '',
+  capacidade: "",
 };
 
 export default function EditarTurmaScreen() {
@@ -46,13 +52,8 @@ export default function EditarTurmaScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [carregouDados, setCarregouDados] = useState(false);
 
-  const {
-    selectedClass,
-    loading,
-    executing,
-    loadClassById,
-    updateClass,
-  } = useClasses();
+  const { selectedClass, loading, executing, loadClassById, updateClass } =
+    useClasses();
 
   const {
     values,
@@ -72,7 +73,7 @@ export default function EditarTurmaScreen() {
         },
         {
           validate: (value) => value.trim().length >= 2,
-          message: 'Nome deve ter pelo menos 2 caracteres',
+          message: "Nome deve ter pelo menos 2 caracteres",
         },
       ],
     },
@@ -82,14 +83,16 @@ export default function EditarTurmaScreen() {
           nome: formValues.nome.trim(),
           turno: formValues.turno,
           anoLetivo: formValues.anoLetivo,
-          capacidade: formValues.capacidade ? parseInt(formValues.capacidade, 10) : undefined,
+          capacidade: formValues.capacidade
+            ? parseInt(formValues.capacidade, 10)
+            : undefined,
         };
 
         const validacao = turmaFactory.validate({
           ...dados,
-          escolaId: selectedClass?.escolaId || '',
+          escolaId: selectedClass?.escolaId || "",
         } as TurmaInput);
-        
+
         if (!validacao.isValid) {
           const primeiroErro = Object.values(validacao.errors)[0];
           throw new Error(primeiroErro);
@@ -97,11 +100,11 @@ export default function EditarTurmaScreen() {
 
         await updateClass(id!, dados);
 
-        Alert.alert('Sucesso', MENSAGENS.turmaAtualizada, [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert("Sucesso", MENSAGENS.turmaAtualizada, [
+          { text: "OK", onPress: () => router.back() },
         ]);
       } catch (error: any) {
-        Alert.alert('Erro', error.message || MENSAGENS.erroSalvar);
+        Alert.alert("Erro", error.message || MENSAGENS.erroSalvar);
       }
     },
   });
@@ -118,7 +121,7 @@ export default function EditarTurmaScreen() {
         nome: selectedClass.nome,
         turno: selectedClass.turno,
         anoLetivo: selectedClass.anoLetivo,
-        capacidade: selectedClass.capacidade?.toString() || '',
+        capacidade: selectedClass.capacidade?.toString() || "",
       });
       setCarregouDados(true);
     }
@@ -137,7 +140,7 @@ export default function EditarTurmaScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         contentContainerStyle={styles.content}
@@ -155,8 +158,8 @@ export default function EditarTurmaScreen() {
           <CampoTexto
             label="Nome da Turma"
             value={values.nome}
-            onChangeText={(text) => handleChange('nome', text)}
-            onBlur={() => handleBlur('nome')}
+            onChangeText={(text) => handleChange("nome", text)}
+            onBlur={() => handleBlur("nome")}
             placeholder="Ex: 5º Ano A"
             erro={errors.nome}
             obrigatorio
@@ -167,7 +170,7 @@ export default function EditarTurmaScreen() {
             label="Turno"
             opcoes={OPCOES_TURNO}
             valor={values.turno}
-            onChange={(value) => handleChange('turno', value)}
+            onChange={(value) => handleChange("turno", value)}
             obrigatorio
           />
 
@@ -175,14 +178,14 @@ export default function EditarTurmaScreen() {
             label="Ano Letivo"
             opcoes={OPCOES_ANO}
             valor={values.anoLetivo}
-            onChange={(value) => handleChange('anoLetivo', value)}
+            onChange={(value) => handleChange("anoLetivo", value)}
             obrigatorio
           />
 
           <CampoTexto
             label="Capacidade de Alunos"
             value={values.capacidade}
-            onChangeText={(text) => handleChange('capacidade', text)}
+            onChangeText={(text) => handleChange("capacidade", text)}
             placeholder="Ex: 30"
             icone="people"
             keyboardType="numeric"
@@ -208,7 +211,7 @@ export default function EditarTurmaScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Ionicons name="checkmark" size={18} color="#fff" />
-              <ButtonText>{carregando ? 'Salvando...' : 'Salvar'}</ButtonText>
+              <ButtonText>{carregando ? "Salvando..." : "Salvar"}</ButtonText>
             </View>
           </Button>
         </View>
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
     padding: ESPACAMENTO.md,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: ESPACAMENTO.lg,
   },
   iconContainer: {
@@ -234,13 +237,13 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     backgroundColor: CORES.sucessoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: ESPACAMENTO.md,
   },
   titulo: {
     fontSize: FONTE.xl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.texto,
   },
   subtitulo: {

@@ -1,34 +1,33 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from 'react-native';
-import { useLocalSearchParams, useRouter, Stack, useFocusEffect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CORES, ESPACAMENTO, FONTE, RAIO, MENSAGENS } from '@utils/constants';
-import { TurnoLabels } from '../../src/types/turno';
-import { formatarData } from '@utils/index';
+  useLocalSearchParams,
+  useRouter,
+  Stack,
+  useFocusEffect,
+} from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { CORES, ESPACAMENTO, FONTE, RAIO, MENSAGENS } from "@utils/constants";
+import { TurnoLabels } from "../../src/types/turno";
+import { formatarData } from "@utils/index";
 
-import { useClasses, useResponsive } from '@hooks/index';
+import { useClasses, useResponsive } from "@hooks/index";
 
-import { Button, ButtonText} from '@components/ui/button';
+import { Button, ButtonText } from "@components/ui/button";
 
-import { ErroTela } from '@components/Erro';
-import { Card } from '@components/Card';
-import { Divisor } from '@components/Divisor';
-import { Badge } from '@components/Badge';
-import { LoadingTela } from '@components/Loading';
+import { ErroTela } from "@components/Erro";
+import { Card } from "@components/Card";
+import { Divisor } from "@components/Divisor";
+import { Badge } from "@components/Badge";
+import { LoadingTela } from "@components/Loading";
 
-function InfoItem({ 
-  icone, 
-  label, 
-  valor 
-}: { 
-  icone: keyof typeof Ionicons.glyphMap; 
-  label: string; 
+function InfoItem({
+  icone,
+  label,
+  valor,
+}: {
+  icone: keyof typeof Ionicons.glyphMap;
+  label: string;
   valor?: string | number | null;
 }) {
   if (valor === undefined || valor === null) return null;
@@ -64,7 +63,7 @@ export default function TurmaDetalheScreen() {
       if (id) {
         loadClassById(id);
       }
-    }, [id, loadClassById])
+    }, [id, loadClassById]),
   );
 
   const handleEditar = () => {
@@ -72,27 +71,23 @@ export default function TurmaDetalheScreen() {
   };
 
   const handleExcluir = () => {
-    Alert.alert(
-      'Excluir Turma',
-      MENSAGENS.confirmarExclusaoTurma,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteClass(id!);
-              Alert.alert('Sucesso', MENSAGENS.turmaExcluida, [
-                { text: 'OK', onPress: () => router.back() },
-              ]);
-            } catch (error: any) {
-              Alert.alert('Erro', error.message || MENSAGENS.erroExcluir);
-            }
-          },
+    Alert.alert("Excluir Turma", MENSAGENS.confirmarExclusaoTurma, [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteClass(id!);
+            Alert.alert("Sucesso", MENSAGENS.turmaExcluida, [
+              { text: "OK", onPress: () => router.back() },
+            ]);
+          } catch (error: any) {
+            Alert.alert("Erro", error.message || MENSAGENS.erroExcluir);
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   if (loading && !turma) {
@@ -101,20 +96,20 @@ export default function TurmaDetalheScreen() {
 
   if (error && !turma) {
     return (
-      <ErroTela 
-        mensagem={error} 
+      <ErroTela
+        mensagem={error}
         onRetry={() => {
           clearError();
           if (id) loadClassById(id);
-        }} 
+        }}
       />
     );
   }
 
   if (!turma) {
     return (
-      <ErroTela 
-        mensagem="Turma não encontrada" 
+      <ErroTela
+        mensagem="Turma não encontrada"
         onRetry={() => router.back()}
         botaoTexto="Voltar"
       />
@@ -125,17 +120,23 @@ export default function TurmaDetalheScreen() {
     <>
       <Stack.Screen options={{ title: turma.nome }} />
 
-      <ScrollView 
-        style={styles.container} 
+      <ScrollView
+        style={styles.container}
         contentContainerStyle={[styles.content, { padding }]}
       >
         <Card style={styles.cardPrincipal}>
           <View style={styles.cardHeader}>
-            <View style={[
-              styles.turmaIconContainer,
-              !isMobile && { width: 64, height: 64 }
-            ]}>
-              <Ionicons name="people" size={isMobile ? 32 : 36} color={CORES.secundaria} />
+            <View
+              style={[
+                styles.turmaIconContainer,
+                !isMobile && { width: 64, height: 64 },
+              ]}
+            >
+              <Ionicons
+                name="people"
+                size={isMobile ? 32 : 36}
+                color={CORES.secundaria}
+              />
             </View>
             <View style={styles.turmaHeaderInfo}>
               <Text style={styles.turmaNome}>{turma.nome}</Text>
@@ -157,25 +158,25 @@ export default function TurmaDetalheScreen() {
 
           <Divisor espacamento="md" />
 
-          <InfoItem 
-            icone="sunny" 
-            label="Turno" 
-            valor={TurnoLabels[turma.turno]} 
+          <InfoItem
+            icone="sunny"
+            label="Turno"
+            valor={TurnoLabels[turma.turno]}
           />
-          <InfoItem 
-            icone="calendar" 
-            label="Ano Letivo" 
-            valor={turma.anoLetivo} 
+          <InfoItem
+            icone="calendar"
+            label="Ano Letivo"
+            valor={turma.anoLetivo}
           />
-          <InfoItem 
-            icone="people" 
-            label="Capacidade" 
-            valor={turma.capacidade ? `${turma.capacidade} alunos` : null} 
+          <InfoItem
+            icone="people"
+            label="Capacidade"
+            valor={turma.capacidade ? `${turma.capacidade} alunos` : null}
           />
-          <InfoItem 
-            icone="time" 
-            label="Última atualização" 
-            valor={formatarData(turma.atualizadoEm)} 
+          <InfoItem
+            icone="time"
+            label="Última atualização"
+            valor={formatarData(turma.atualizadoEm)}
           />
 
           <Divisor espacamento="md" />
@@ -203,7 +204,9 @@ export default function TurmaDetalheScreen() {
             >
               <View className="flex-row items-center gap-1">
                 <Ionicons name="trash" size={16} color={CORES.preto} />
-                <ButtonText >{executing ? 'Excluindo...' : 'Excluir'}</ButtonText>
+                <ButtonText>
+                  {executing ? "Excluindo..." : "Excluir"}
+                </ButtonText>
               </View>
             </Button>
           </View>
@@ -215,8 +218,9 @@ export default function TurmaDetalheScreen() {
             <View style={styles.infoCardTexto}>
               <Text style={styles.infoCardTitulo}>Sobre esta turma</Text>
               <Text style={styles.infoCardDescricao}>
-                Esta turma pertence a uma escola específica. Para alterar a escola, 
-                você precisará excluir esta turma e criar uma nova na escola desejada.
+                Esta turma pertence a uma escola específica. Para alterar a
+                escola, você precisará excluir esta turma e criar uma nova na
+                escola desejada.
               </Text>
             </View>
           </View>
@@ -238,16 +242,16 @@ const styles = StyleSheet.create({
     marginBottom: ESPACAMENTO.md,
   },
   cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   turmaIconContainer: {
     width: 56,
     height: 56,
     borderRadius: RAIO.lg,
     backgroundColor: CORES.sucessoClaro,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: ESPACAMENTO.md,
   },
   turmaHeaderInfo: {
@@ -255,7 +259,7 @@ const styles = StyleSheet.create({
   },
   turmaNome: {
     fontSize: FONTE.lg,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: CORES.texto,
   },
   turmaData: {
@@ -264,13 +268,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   badges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: ESPACAMENTO.sm,
   },
   infoItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     marginBottom: ESPACAMENTO.sm,
   },
   infoTexto: {
@@ -287,15 +291,15 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   acoes: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: ESPACAMENTO.md,
   },
   infoCard: {
     backgroundColor: CORES.infoClaro,
   },
   infoCardContent: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   infoCardTexto: {
     flex: 1,
@@ -303,7 +307,7 @@ const styles = StyleSheet.create({
   },
   infoCardTitulo: {
     fontSize: FONTE.sm,
-    fontWeight: '600',
+    fontWeight: "600",
     color: CORES.texto,
     marginBottom: 4,
   },

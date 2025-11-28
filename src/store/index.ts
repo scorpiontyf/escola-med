@@ -1,12 +1,11 @@
-
-export { 
+export {
   useEscolaStore,
   useEscolas,
   useEscolaSelecionada,
   useEscolaCarregando,
   useEscolaExecutando,
   useEscolaErro,
-} from './escolaStore';
+} from "./escolaStore";
 
 export {
   useTurmaStore,
@@ -15,4 +14,4 @@ export {
   useTurmaCarregando,
   useTurmaExecutando,
   useTurmaErro,
-} from './turmaStore';
+} from "./turmaStore";

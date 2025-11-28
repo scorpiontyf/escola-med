@@ -4,9 +4,9 @@ import { Spinner } from "@components/ui/spinner";
 
 export function LoadingScreen({ mensagem }: { mensagem: string }) {
   return (
-    <View >
+    <View>
       <Spinner size="large" color={CORES.primaria} />
-      <Text >{mensagem}</Text>
+      <Text>{mensagem}</Text>
     </View>
   );
 }

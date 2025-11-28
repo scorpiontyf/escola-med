@@ -1,11 +1,17 @@
 /**
  * Factory Pattern
- * 
+ *
  * Centraliza a criação de entidades com validação e defaults.
  * Garante que todas as entidades são criadas de forma consistente.
  */
 
-import { Turma, TurmaInput, isTurnoValido, Escola, EscolaInput  } from '../types/index';
+import {
+  Turma,
+  TurmaInput,
+  isTurnoValido,
+  Escola,
+  EscolaInput,
+} from "../types/index";
 
 interface IEntityFactory<TEntity, TInput> {
   create(input: TInput): TEntity;
@@ -25,21 +31,20 @@ function retornarDataAtual(): string {
   return new Date().toISOString();
 }
 
-
 export class EscolaFactory implements IEntityFactory<Escola, EscolaInput> {
   validate(input: EscolaInput): ValidationResult {
     const errors: Record<string, string> = {};
 
     if (!input.nome || input.nome.trim().length < 3) {
-      errors.nome = 'Nome é obrigatório (mínimo 3 caracteres)';
+      errors.nome = "Nome é obrigatório (mínimo 3 caracteres)";
     }
 
     if (!input.endereco || input.endereco.trim().length < 5) {
-      errors.endereco = 'Endereço é obrigatório (mínimo 5 caracteres)';
+      errors.endereco = "Endereço é obrigatório (mínimo 5 caracteres)";
     }
 
     if (input.email && !this.isValidEmail(input.email)) {
-      errors.email = 'E-mail inválido';
+      errors.email = "E-mail inválido";
     }
 
     return {
@@ -51,7 +56,9 @@ export class EscolaFactory implements IEntityFactory<Escola, EscolaInput> {
   create(input: EscolaInput): Escola {
     const validation = this.validate(input);
     if (!validation.isValid) {
-      throw new Error(`Dados inválidos: ${Object.values(validation.errors).join(', ')}`);
+      throw new Error(
+        `Dados inválidos: ${Object.values(validation.errors).join(", ")}`,
+      );
     }
 
     return {
@@ -90,23 +97,26 @@ export class TurmaFactory implements IEntityFactory<Turma, TurmaInput> {
     const errors: Record<string, string> = {};
 
     if (!input.escolaId) {
-      errors.escolaId = 'ID da escola é obrigatório';
+      errors.escolaId = "ID da escola é obrigatório";
     }
 
     if (!input.nome || input.nome.trim().length < 2) {
-      errors.nome = 'Nome é obrigatório (mínimo 2 caracteres)';
+      errors.nome = "Nome é obrigatório (mínimo 2 caracteres)";
     }
 
     if (!input.turno || !isTurnoValido(input.turno)) {
-      errors.turno = 'Turno é obrigatório';
+      errors.turno = "Turno é obrigatório";
     }
 
     if (!input.anoLetivo || input.anoLetivo < 2020 || input.anoLetivo > 2030) {
-      errors.anoLetivo = 'Ano letivo inválido';
+      errors.anoLetivo = "Ano letivo inválido";
     }
 
-    if (input.capacidade !== undefined && (input.capacidade < 1 || input.capacidade > 100)) {
-      errors.capacidade = 'Capacidade deve ser entre 1 e 100';
+    if (
+      input.capacidade !== undefined &&
+      (input.capacidade < 1 || input.capacidade > 100)
+    ) {
+      errors.capacidade = "Capacidade deve ser entre 1 e 100";
     }
 
     return {
@@ -118,7 +128,9 @@ export class TurmaFactory implements IEntityFactory<Turma, TurmaInput> {
   create(input: TurmaInput): Turma {
     const validation = this.validate(input);
     if (!validation.isValid) {
-      throw new Error(`Dados inválidos: ${Object.values(validation.errors).join(', ')}`);
+      throw new Error(
+        `Dados inválidos: ${Object.values(validation.errors).join(", ")}`,
+      );
     }
 
     return {

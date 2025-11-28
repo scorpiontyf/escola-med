@@ -1,6 +1,6 @@
-import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CORES } from '@utils/constants';
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { CORES } from "@utils/constants";
 
 type IoniconsName = keyof typeof Ionicons.glyphMap;
 
@@ -24,22 +24,22 @@ export default function TabLayout() {
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: '500',
+          fontWeight: "500",
         },
         headerStyle: {
           backgroundColor: CORES.primaria,
         },
         headerTintColor: CORES.branco,
         headerTitleStyle: {
-          fontWeight: '600',
+          fontWeight: "600",
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Escolas',
-          headerTitle: 'Gestão Escolar',
+          title: "Escolas",
+          headerTitle: "Gestão Escolar",
           tabBarIcon: ({ color }) => <TabBarIcon name="school" color={color} />,
         }}
       />
@@ -47,7 +47,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="sobre"
         options={{
-          title: 'Sobre',
+          title: "Sobre",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="information-circle" color={color} />
           ),

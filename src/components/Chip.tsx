@@ -1,11 +1,9 @@
-
-
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { Pressable } from './ui/pressable';
-import { HStack } from './ui/hstack';
-import { Box } from './ui/box';
-import { Text } from './ui/text';
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { Pressable } from "./ui/pressable";
+import { HStack } from "./ui/hstack";
+import { Box } from "./ui/box";
+import { Text } from "./ui/text";
 
 interface ChipProps {
   label: string;
@@ -30,22 +28,22 @@ export function Chip({
         px="$3"
         py="$2"
         borderRadius={100}
-        bg={selecionado ? '$primary500' : '$backgroundLight200'}
+        bg={selecionado ? "$primary500" : "$backgroundLight200"}
         borderWidth={1}
-        borderColor={selecionado ? '$primary500' : '$borderLight300'}
+        borderColor={selecionado ? "$primary500" : "$borderLight300"}
       >
         {icone && (
           <Ionicons
             name={icone}
             size={14}
-            color={selecionado ? 'white' : '#666'}
+            color={selecionado ? "white" : "#666"}
           />
         )}
-        
+
         <Text
           fontSize="$sm"
-          color={selecionado ? '$white' : '$textLight600'}
-          fontWeight={selecionado ? '$semibold' : '$normal'}
+          color={selecionado ? "$white" : "$textLight600"}
+          fontWeight={selecionado ? "$semibold" : "$normal"}
           padding={3}
         >
           {label}
@@ -53,7 +51,7 @@ export function Chip({
 
         {contador !== undefined && contador > 0 && (
           <Box
-            bg={selecionado ? 'rgba(255,255,255,0.3)' : '$borderLight400'}
+            bg={selecionado ? "rgba(255,255,255,0.3)" : "$borderLight400"}
             borderRadius="$full"
             px="$1.5"
             minWidth={20}
@@ -61,7 +59,7 @@ export function Chip({
           >
             <Text
               fontSize="$xs"
-              color={selecionado ? '$white' : '$textLight600'}
+              color={selecionado ? "$white" : "$textLight600"}
               fontWeight="$semibold"
             >
               {contador}
@@ -82,7 +80,12 @@ export function ChipGroup({ children, label }: ChipGroupProps) {
   return (
     <Box mb="$4">
       {label && (
-        <Text fontSize="$sm" fontWeight="$semibold" color="$textLight700" mb="$2">
+        <Text
+          fontSize="$sm"
+          fontWeight="$semibold"
+          color="$textLight700"
+          mb="$2"
+        >
           {label}
         </Text>
       )}

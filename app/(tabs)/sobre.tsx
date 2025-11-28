@@ -73,7 +73,6 @@ export default function SobreScreen() {
         <InfoItem icon="layers" titulo="Zustand" valor="5.0.8" />
         <InfoItem icon="logo-react" titulo="React" valor="19.1.0" />
       </View>
-
     </ScrollView>
   );
 }
