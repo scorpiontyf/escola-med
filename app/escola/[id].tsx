@@ -229,7 +229,6 @@ export default function EscolaDetalheScreen() {
           <View style={styles.acoes}>
             <Button
               onPress={handleEditar}
-              variant="outline"
               action="primary"
               size="sm"
               className="flex-1"
@@ -242,14 +241,13 @@ export default function EscolaDetalheScreen() {
 
             <Button
               onPress={handleExcluir}
-              variant="outline"
               action="negative"
               size="sm"
               disabled={executing}
               className="flex-1"
             >
               <View className="flex-row items-center gap-1">
-                <Ionicons name="trash" size={16} color={CORES.erro} />
+                <Ionicons name="trash" size={16} color={CORES.preto} />
                 <ButtonText>
                   {executing ? "Excluindo..." : "Excluir"}
                 </ButtonText>
