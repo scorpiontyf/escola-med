@@ -63,11 +63,11 @@ export default function NovaTurmaScreen() {
     validationRules: {
       nome: [
         {
-          validate: (value) => value.trim().length > 0,
+          validate: (value) => Number(value.toString().trim().length) > 0,
           message: MENSAGENS.campoObrigatorio,
         },
         {
-          validate: (value) => value.trim().length >= 2,
+          validate: (value) => Number(value.toString().trim().length) >= 2,
           message: "Nome deve ter pelo menos 2 caracteres",
         },
       ],
