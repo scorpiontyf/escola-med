@@ -113,7 +113,7 @@ export class TurmaFactory implements IEntityFactory<Turma, TurmaInput> {
     }
 
     if (
-      input.capacidade !== null &&
+      input.capacidade &&
       (input.capacidade < 1 || input.capacidade > 100)
     ) {
       errors.capacidade = "Capacidade deve ser entre 1 e 100";
