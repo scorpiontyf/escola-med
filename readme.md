@@ -28,7 +28,7 @@ Sistema desenvolvido para centralizar o cadastro de escolas públicas e turmas, 
 
 ## 📦 Pré-requisitos
 
-- Node.js 18.x ou superior
+- Node.js 20.x ou superior
 - npm ou yarn
 - Expo Go (app no celular) ou emulador Android/iOS
 
